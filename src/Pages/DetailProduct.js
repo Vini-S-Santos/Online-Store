@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import * as localHandler from '../services/addGetRemoveLocal';
 
 class DetailProduct extends React.Component {
   constructor() {
@@ -36,6 +37,13 @@ class DetailProduct extends React.Component {
         />
         <p data-testid="product-detail-price">{productDetails.price}</p>
         <Link data-testid="shopping-cart-button" to="/Cart">Carrinho</Link>
+        <button
+          onClick={ () => localHandler.saveProduct(productDetails) }
+          type="button"
+          data-testid="product-detail-add-to-cart"
+        >
+          Adicionar ao carrinho
+        </button>
       </div>
     );
   }
