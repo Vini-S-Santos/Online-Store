@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import * as localHandler from '../services/addGetRemoveLocal';
+import FormDetail from '../Components/FormDetail';
 
 class DetailProduct extends React.Component {
   constructor() {
@@ -26,16 +27,17 @@ class DetailProduct extends React.Component {
 
   render() {
     const { productDetails } = this.state;
+    const { title, thumbnail, price, id } = productDetails;
     return (
       <div>
         <Link to="/">Home</Link>
-        <p data-testid="product-detail-name">{productDetails.title}</p>
+        <p data-testid="product-detail-name">{title}</p>
         <img
           data-testid="product-detail-image"
-          src={ productDetails.thumbnail }
-          alt={ productDetails.title }
+          src={ thumbnail }
+          alt={ title }
         />
-        <p data-testid="product-detail-price">{productDetails.price}</p>
+        <p data-testid="product-detail-price">{price}</p>
         <Link data-testid="shopping-cart-button" to="/Cart">Carrinho</Link>
         <button
           onClick={ () => localHandler.saveProduct(productDetails) }
@@ -44,6 +46,9 @@ class DetailProduct extends React.Component {
         >
           Adicionar ao carrinho
         </button>
+        <div>
+          <FormDetail productDetails={ id } />
+        </div>
       </div>
     );
   }
@@ -51,6 +56,7 @@ class DetailProduct extends React.Component {
 
 DetailProduct.propTypes = {
   match: PropTypes.objectOf(PropTypes.object),
+  id: PropTypes.string.isRequired,
 }.isRequired;
 
 export default (DetailProduct);
