@@ -12,6 +12,7 @@ class FormDetail extends Component {
 
   componentDidMount() {
     this.getLocalStorage();
+    console.log(this.state.information);
   }
 
   handleChange = (event) => {
@@ -23,7 +24,7 @@ class FormDetail extends Component {
     const { email, rate, text } = this.state;
     const regex = /\S+@\S+\.\S+/;
     const emailValidation = regex.test(email);
-    if (!emailValidation || rate.leght === 0) {
+    if (!emailValidation || rate.length === 0) {
       this.setState({
         validate: true,
       });
@@ -61,75 +62,81 @@ class FormDetail extends Component {
   };
 
   render() {
-    const { validate, email, information } = this.state;
+    const { validate, email, information, text } = this.state;
     return (
       <div>
         <form>
-          <label htmlFor="email">
+          <label htmlFor="mail">
             <input
-              data-testid="product-detail-email"
               type="email"
               name="email"
-              id="email"
+              id="mail"
               value={ email }
+              data-testid="product-detail-email"
               onChange={ this.handleChange }
             />
           </label>
+
           <input
-            data-testid="1-rating"
             type="radio"
             name="rate"
             id=""
             value="1"
+            data-testid="1-rating"
             onChange={ this.handleChange }
           />
           <input
-            data-testid="2-rating"
             type="radio"
             name="rate"
             id=""
             value="2"
+            data-testid="2-rating"
             onChange={ this.handleChange }
           />
           <input
-            data-testid="3-rating"
             type="radio"
             name="rate"
             id=""
             value="3"
+            data-testid="3-rating"
             onChange={ this.handleChange }
           />
           <input
-            data-testid="4-rating"
             type="radio"
             name="rate"
             id=""
             value="4"
+            data-testid="4-rating"
             onChange={ this.handleChange }
           />
+
           <input
-            data-testid="5-rating"
             type="radio"
             name="rate"
             id=""
             value="5"
+            data-testid="5-rating"
             onChange={ this.handleChange }
           />
+
           <textarea
-            data-testid="product-detail-evaluation"
             name="text"
             id=""
             cols="30"
-            rows="10"
+            rows="5"
+            value={ text }
+            data-testid="product-detail-evaluation"
+            onChange={ this.handleChange }
           />
+
           <button
-            data-testid="submit-review-btn"
             type="button"
+            data-testid="submit-review-btn"
             onClick={ this.validation }
           >
             Enviar
           </button>
-          {validate && <p data-testid="error-msg"> Campos inválidos</p>}
+          {validate && <p data-testid="error-msg">Campos inválidos</p>}
         </form>
         {
           information.map((item, index) => (
