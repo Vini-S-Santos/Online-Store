@@ -29,6 +29,15 @@ class Cart extends Component {
                 refresh={ this.refreshComponent }
               />))}
         </div>
+        <Link to="/checkout">
+          <button
+            className="button is-success"
+            type="button"
+            data-testid="checkout-products"
+          >
+            Finalizar Compra
+          </button>
+        </Link>
       </section>
     );
   }

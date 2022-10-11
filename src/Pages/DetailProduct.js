@@ -41,7 +41,6 @@ class DetailProduct extends React.Component {
     this.setState({
       information: getItems,
     });
-    console.log(getItems);
   };
 
   validation = () => {
