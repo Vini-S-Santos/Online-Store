@@ -2,18 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import * as localHandler from '../services/addGetRemoveLocal';
-import FormDetail from '../Components/FormDetail';
 
 class DetailProduct extends React.Component {
   constructor() {
     super();
     this.state = {
       productDetails: [],
+      email: '',
+      rate: '',
+      text: '',
+      validate: false,
+      information: [],
     };
   }
 
   componentDidMount() {
     this.fetchItemDetails();
+    this.getLocalStorage();
   }
 
   fetchItemDetails = async () => {
@@ -25,9 +30,56 @@ class DetailProduct extends React.Component {
     });
   };
 
+  handleChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
+
+  getLocalStorage = () => {
+    const { match: { params: { id } } } = this.props;
+    const getItems = JSON.parse(localStorage.getItem(id) || '[]');
+    this.setState({
+      information: getItems,
+    });
+    console.log(getItems);
+  };
+
+  validation = () => {
+    const { email, rate, text } = this.state;
+    const regex = /\S+@\S+\.\S+/;
+    const emailValidation = regex.test(email);
+    if (!emailValidation || rate.length === 0) {
+      this.setState({
+        validate: true,
+      });
+    } else {
+      this.saveLocalStorage(email, rate, text);
+      this.setState({
+        email: '',
+        text: '',
+        validate: false,
+      });
+    }
+  };
+
+  saveLocalStorage = (email, rate, text) => {
+    const { match: { params: { id } } } = this.props;
+    const { information } = this.state;
+    const ids = {
+      email,
+      rate,
+      text,
+    };
+    const newObject = [...information, ids];
+    this.setState({
+      information: newObject,
+    });
+    localStorage.setItem(id, JSON.stringify(newObject));
+  };
+
   render() {
-    const { productDetails } = this.state;
-    const { title, thumbnail, price, id } = productDetails;
+    const { productDetails, validate, email, information, text } = this.state;
+    const { title, thumbnail, price } = productDetails;
     return (
       <div>
         <Link to="/">Home</Link>
@@ -47,9 +99,89 @@ class DetailProduct extends React.Component {
           Adicionar ao carrinho
         </button>
         <div>
-          <FormDetail productDetails={ id } />
+          <form>
+            <label htmlFor="mail">
+              <input
+                type="email"
+                name="email"
+                id="mail"
+                value={ email }
+                data-testid="product-detail-email"
+                onChange={ this.handleChange }
+              />
+            </label>
+
+            <input
+              type="radio"
+              name="rate"
+              id=""
+              value="1"
+              data-testid="1-rating"
+              onChange={ this.handleChange }
+            />
+            <input
+              type="radio"
+              name="rate"
+              id=""
+              value="2"
+              data-testid="2-rating"
+              onChange={ this.handleChange }
+            />
+            <input
+              type="radio"
+              name="rate"
+              id=""
+              value="3"
+              data-testid="3-rating"
+              onChange={ this.handleChange }
+            />
+            <input
+              type="radio"
+              name="rate"
+              id=""
+              value="4"
+              data-testid="4-rating"
+              onChange={ this.handleChange }
+            />
+
+            <input
+              type="radio"
+              name="rate"
+              id=""
+              value="5"
+              data-testid="5-rating"
+              onChange={ this.handleChange }
+            />
+
+            <textarea
+              name="text"
+              id=""
+              cols="30"
+              rows="5"
+              value={ text }
+              data-testid="product-detail-evaluation"
+              onChange={ this.handleChange }
+            />
+
+            <button
+              type="button"
+              data-testid="submit-review-btn"
+              onClick={ this.validation }
+            >
+              Enviar
+            </button>
+            {validate && <p data-testid="error-msg">Campos inválidos</p>}
+          </form>
+          {information.map((item, index) => (
+            <div key={ index }>
+              <p data-testid="review-card-email">{item.email}</p>
+              <p data-testid="review-card-evaluation">{item.text}</p>
+              <p data-testid="review-card-rating">{item.rate}</p>
+            </div>
+          ))}
         </div>
       </div>
+
     );
   }
 }

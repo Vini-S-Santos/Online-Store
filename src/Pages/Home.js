@@ -55,7 +55,6 @@ class Home extends React.Component {
               <input
                 data-testid="category"
                 type="checkbox"
-                // onChange={ handlecheck }
                 name="category"
                 id={ category.id }
               />
