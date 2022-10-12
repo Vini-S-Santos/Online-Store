@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import CardProducts from '../Components/CardProducts';
+import Header from '../Components/Header';
 import * as api from '../services/api';
 
 class Home extends React.Component {
@@ -9,6 +9,7 @@ class Home extends React.Component {
     this.state = {
       categories: [],
       products: [],
+      headerFunc: '',
     };
   }
 
@@ -31,12 +32,16 @@ class Home extends React.Component {
     });
   };
 
+  getHeaderState = (func) => {
+    this.setState({ headerFunc: func });
+  };
+
   render() {
-    const { categories, products } = this.state;
+    const { categories, products, headerFunc } = this.state;
     return (
       <div data-testid="home-initial-message">
         <div>
-          <Link data-testid="shopping-cart-button" to="/Cart">Carrinho</Link>
+          <Header getHeaderState={ this.getHeaderState } />
           <input
             type="text"
             data-testid="query-input"
@@ -68,6 +73,7 @@ class Home extends React.Component {
               <CardProducts
                 key={ index }
                 products={ product }
+                headerFunc={ headerFunc }
               />
             ))}
         </div>

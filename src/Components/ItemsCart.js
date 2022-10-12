@@ -10,12 +10,42 @@ class ItemsCart extends Component {
     };
   }
 
-  addRemoveQuantity = ({ target }) => {
+  componentDidMount() {
+    const { data } = this.props;
+    console.log(data.available_quantity);
+  }
+
+  limitQuantity = (object) => {
+    const { available_quantity: availableQuantity, id } = object;
+    const localQuantity = localStorage.getItem(`r${id}`);
+    const verifyQuantity = availableQuantity > localQuantity;
+    return verifyQuantity;
+  };
+
+  increaseCounter = () => {
+    const { data } = this.props;
+    const verify = this.limitQuantity(data);
+    this.setState((prev) => ({
+      quantity: verify ? prev.quantity + 1 : prev.quantity,
+    }), () => {
+      const { quantity } = this.state;
+      localStorage.setItem(`r${data.id}`, quantity);
+      this.addRemoveQuantity('sum');
+    });
+  };
+
+  decreaseCounter = () => {
+    const { data } = this.props;
     const { quantity } = this.state;
-    const operator = target.name;
-    if (operator === 'sum') {
-      this.setState({ quantity: quantity + 1 });
-    } else if (operator === 'sub') {
+    localStorage.setItem(`r${data.id}`, quantity);
+    this.addRemoveQuantity('sub');
+  };
+
+  addRemoveQuantity = (target) => {
+    const { quantity } = this.state;
+    if (target === 'sum') {
+      this.setState((prev) => ({ quantity: prev.quantity }));
+    } else if (target === 'sub') {
       if (quantity > 1) {
         this.setState({ quantity: quantity - 1 });
       } else {
@@ -45,7 +75,7 @@ class ItemsCart extends Component {
             name="sum"
             data-testid="product-increase-quantity"
             type="button"
-            onClick={ this.addRemoveQuantity }
+            onClick={ this.increaseCounter }
           >
             +
           </button>
@@ -53,7 +83,7 @@ class ItemsCart extends Component {
             name="sub"
             data-testid="product-decrease-quantity"
             type="button"
-            onClick={ this.addRemoveQuantity }
+            onClick={ this.decreaseCounter }
           >
             -
           </button>

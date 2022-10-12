@@ -5,14 +5,14 @@ import * as localHandler from '../services/addGetRemoveLocal';
 
 class CardProducts extends React.Component {
   render() {
-    const { products } = this.props;
+    const { products, headerFunc } = this.props;
     const {
       price,
       title,
       thumbnail,
       id,
       permalink,
-      shipping: { freeShipping },
+      shipping,
     } = products;
     return (
       <div data-testid="product" id={ id }>
@@ -26,10 +26,10 @@ class CardProducts extends React.Component {
           Mais detalhes
         </Link>
         <br />
-        {freeShipping && <h4>Frete Gratis</h4>}
+        {shipping.free_shipping && <h4 data-testid="free-shipping">Frete Gratis</h4>}
         <br />
         <button
-          onClick={ () => localHandler.saveProduct(products) }
+          onClick={ () => { localHandler.saveProduct(products); headerFunc(); } }
           type="button"
           data-testid="product-add-to-cart"
         >
@@ -44,4 +44,5 @@ export default CardProducts;
 
 CardProducts.propTypes = {
   products: PropTypes.array,
+  headerFunc: PropTypes.func,
 }.isRequired;

@@ -10,7 +10,6 @@ class Cart extends Component {
 
   render() {
     const shoppingCart = localHandler.getProducts();
-    // console.log(shoppingCart);
     const emptyCart = (
       <h2 data-testid="shopping-cart-empty-message">
         Seu carrinho está vazio

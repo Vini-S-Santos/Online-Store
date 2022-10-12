@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import * as localHandler from '../services/addGetRemoveLocal';
+import Header from '../Components/Header';
 
 class DetailProduct extends React.Component {
   constructor() {
@@ -13,6 +14,7 @@ class DetailProduct extends React.Component {
       text: '',
       validate: false,
       information: [],
+      headerFunc: '',
     };
   }
 
@@ -76,11 +78,16 @@ class DetailProduct extends React.Component {
     localStorage.setItem(id, JSON.stringify(newObject));
   };
 
+  getHeaderState = (func) => {
+    this.setState({ headerFunc: func });
+  };
+
   render() {
-    const { productDetails, validate, email, information, text } = this.state;
+    const { productDetails, validate, email, information, text, headerFunc } = this.state;
     const { title, thumbnail, price } = productDetails;
     return (
       <div>
+        <Header getHeaderState={ this.getHeaderState } />
         <Link to="/">Home</Link>
         <p data-testid="product-detail-name">{title}</p>
         <img
@@ -89,9 +96,8 @@ class DetailProduct extends React.Component {
           alt={ title }
         />
         <p data-testid="product-detail-price">{price}</p>
-        <Link data-testid="shopping-cart-button" to="/Cart">Carrinho</Link>
         <button
-          onClick={ () => localHandler.saveProduct(productDetails) }
+          onClick={ () => { localHandler.saveProduct(productDetails); headerFunc(); } }
           type="button"
           data-testid="product-detail-add-to-cart"
         >
